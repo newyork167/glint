@@ -1,5 +1,8 @@
 param ($ConanfilePath, $BuildDir); 
 
+Write-Host "Adding bincrafters remote"
+conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
 if ($BuildDir -eq $null) {
 	Write-Host "Must specify build directory if not using CMakeLists!"
 	return;

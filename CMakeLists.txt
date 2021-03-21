@@ -22,6 +22,10 @@ find_package(assimp CONFIG)
 find_package(stb CONFIG)
 find_package(glm CONFIG)
 
+# Dependencies -- Boost
+Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
+find_package(Boost 1.75.0 COMPONENTS filesystem REQUIRED)
+
 if (DEBUG)
     set(powershellScriptPath "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/debug_SymlinkShaders.ps1")
     execute_process(COMMAND powershell -ExecutionPolicy Bypass -File ${powershellScriptPath} -ShaderDir "${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders/" -SymlinkToDir "${CMAKE_CURRENT_BINARY_DIR}/bin")
@@ -38,8 +42,8 @@ endif()
 
 include_directories(Glint/Headers/)
 
-file(GLOB PROJECT_HEADERS Glint/Headers/*.hpp)
-file(GLOB PROJECT_SOURCES Glint/Sources/*.cpp)
+file(GLOB_RECURSE PROJECT_HEADERS Glint/Headers/*.hpp)
+file(GLOB_RECURSE PROJECT_SOURCES Glint/Sources/*.cpp)
 file(GLOB PROJECT_SHADERS Glint/Shaders/*.comp
                           Glint/Shaders/*.frag
                           Glint/Shaders/*.geom
@@ -55,6 +59,8 @@ if (DEBUG)
 else()
     source_group("Shaders" FILES ${PROJECT_SHADERS})
 endif()
+
+message("SOURCES: ${PROJECT_SOURCES}")
 
 source_group("Headers" FILES ${PROJECT_HEADERS})
 source_group("Sources" FILES ${PROJECT_SOURCES})
@@ -72,7 +78,9 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS}
                                ${VENDORS_SOURCES} )
 target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
 #target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
-conan_target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
+conan_target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS}
+                                PRIVATE
+                               Boost::filesystem)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 

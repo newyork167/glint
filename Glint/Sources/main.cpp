@@ -111,7 +111,6 @@ void render_test_imgui(Shader *triangle_shader, GLuint vao) {
 
 void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 {
-
 	// create the triangle
 	float triangle_vertices[] = {
 		0.0f, 0.25f, 0.0f,	// position vertex 1
@@ -123,6 +122,7 @@ void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 	};
 	unsigned int triangle_indices[] = {
 		0, 1, 2 };
+
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ebo);
