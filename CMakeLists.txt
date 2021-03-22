@@ -24,11 +24,13 @@ find_package(glm CONFIG)
 
 # Dependencies -- Boost
 Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
-find_package(Boost 1.75.0 COMPONENTS filesystem REQUIRED)
+find_package(Boost 1.75.0 COMPONENTS filesystem)
 
 if (DEBUG)
-    set(powershellScriptPath "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/debug_SymlinkShaders.ps1")
-    execute_process(COMMAND powershell -ExecutionPolicy Bypass -File ${powershellScriptPath} -ShaderDir "${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders/" -SymlinkToDir "${CMAKE_CURRENT_BINARY_DIR}/bin")
+    if(WIN32)
+        set(powershellScriptPath "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/debug_SymlinkShaders.ps1")
+        execute_process(COMMAND powershell -ExecutionPolicy Bypass -File ${powershellScriptPath} -ShaderDir "${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders/" -SymlinkToDir "${CMAKE_CURRENT_BINARY_DIR}/bin")
+    endif()
 endif()
 
 if(MSVC)
@@ -85,6 +87,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 
 add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Glint/Shaders $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    DEPENDS ${PROJECT_SHADERS})
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Glint/Shaders $<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders
+        DEPENDS ${PROJECT_SHADERS})
