@@ -6,15 +6,15 @@ set(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 
 set(DEBUG TRUE)
 
-if(WIN32)
-    message("Test: " ${CMAKE_CURRENT_BINARY_DIR})
-    set(conan_install_script "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/conan_setup.ps1")
-    execute_process(COMMAND powershell -ExecutionPolicy Bypass -File ${conan_install_script} -ConanfilePath "${CMAKE_CURRENT_SOURCE_DIR}" -BuildDir ${CMAKE_CURRENT_BINARY_DIR})
-endif()
+# Run conan install on conanfile.py
+set(conan_setup_file "Scripts/conan_setup.py")
+execute_process(COMMAND python ${conan_setup_file} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ ) 
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+# Import the cmake that was made and run the setup on it
+include(${CMAKE_CURRENT_SOURCE_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
+# Find all the packages - Add a find_package here for others you want to include
 find_package(imgui CONFIG)
 find_package(glad CONFIG)
 find_package(glfw3 CONFIG)
@@ -26,11 +26,14 @@ find_package(glm CONFIG)
 Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
 find_package(Boost 1.75.0 COMPONENTS filesystem)
 
+# If we are debugging, symlink the shaders directory to allow live reloading/editing
 if (DEBUG)
-    if(WIN32)
-        set(powershellScriptPath "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/debug_SymlinkShaders.ps1")
-        execute_process(COMMAND powershell -ExecutionPolicy Bypass -File ${powershellScriptPath} -ShaderDir "${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders/" -SymlinkToDir "${CMAKE_CURRENT_BINARY_DIR}/bin")
-    endif()
+    message("Symlinking shaders for live reloading")
+    message("Link from ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders to ${CMAKE_CURRENT_BINARY_DIR}/bin")
+    execute_process(COMMAND python Scripts/debug_SymlinkShaders.py 
+        -s "${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders"
+        -d "${CMAKE_CURRENT_BINARY_DIR}/bin/Shaders"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
 endif()
 
 if(MSVC)

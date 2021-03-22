@@ -24,8 +24,8 @@
 // Set your includes here
 #include "classes/shader_s.h"
 #include "imgui.h"
-#include "../bindings/imgui_impl_glfw.h"
-#include "../bindings/imgui_impl_opengl3.h"
+#include "../Vendors/imgui/imgui_impl_glfw.h"
+#include "../Vendors/imgui/imgui_impl_opengl3.h"
 
 #include "boost/filesystem.hpp"
 #include "classes/vertex_buffer.hpp"

@@ -1,5 +1,6 @@
 [Bb]uild/
 Glint/bindings/
+Glint/Vendors/
 conan_imports_manifest.txt
 CMakeSettings.json
 
