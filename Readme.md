@@ -7,8 +7,9 @@ Glint is based on [Glitter](http://polytonic.github.io/Glitter/) using instead a
 This also adds in ImGUI for adding gui configurations quickly and easily along with many other useful libraries!
 
 ### TODO
-- I still need to update the shader symlink for debug mode on OS X/Linux.
-- Add in native project format for visual studio?
+- Add in native project format generator for visual studio?
+- Add in test scene with more complex geometry
+- Add a branch for Vulkan (maybe another repo would be better)
 
 ## Getting Started
 Download cmake: [cmake](http://www.cmake.org/download/)
@@ -16,19 +17,15 @@ Download cmake: [cmake](http://www.cmake.org/download/)
 Download conan: [conan](https://conan.io/downloads.html)
 - Can also be installed with ```pip install conan```
 
+The CMake script will handle calling all of the relevant conan install/update functions. 
+
 ```bash
 git clone https://github.com/newyork167/glint
+
+########################################################################
+# If not using Visual Studio or another IDE with cmake or conan plugin #
+########################################################################
 cd glint
-
-# Windows
-./Scripts/conan_setup.ps1
-
-# Linux/Darwin
-./Scripts/conan_setup.sh
-
-###############################################################
-# If not using Visual Studio or another IDE with conan plugin #
-###############################################################
 mkdir build && cd build
 
 # UNIX Makefile
