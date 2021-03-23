@@ -9,8 +9,6 @@ set(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 set(DEBUG TRUE)
 
 # Run conan install on conanfile.py
-set(conan_setup_file "Scripts/conan_setup.py")
-#execute_process(COMMAND python ${conan_setup_file} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
 execute_process(COMMAND conan install -if . conanfile.py WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
 
 # Import the cmake that was made and run the setup on it
