@@ -19,14 +19,12 @@ class GlintConan(ConanFile):
     default_options = dependencies.options
 
     def build(self):
-        print(f"Current Dir: {os.getcwd()}")
         cmake = CMake(self)
         cmake.configure(source_folder='{}'.format(self.source_folder))
         cmake.build()
         cmake.install()
 
     def imports(self):
-        print(f"Current Dir: {os.getcwd()}")
         self.copy("*.dll", dst="bin", src="bin")
         self.copy("*.so*", dst="bin", src="lib")
         self.copy("*.dylib*", dst="bin", src="lib")

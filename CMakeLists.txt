@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 3.0)
 project(Glint)
 
+# Set some CMake commands to ignore certain C++17 issues
 set(CMAKE_CXX_STANDARD 17)
 set(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 
+# CHANGEME when you want to not run in debug
 set(DEBUG TRUE)
 
 # Run conan install on conanfile.py
 set(conan_setup_file "Scripts/conan_setup.py")
-execute_process(COMMAND python ${conan_setup_file} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ ) 
+#execute_process(COMMAND python ${conan_setup_file} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
+execute_process(COMMAND conan install -if . conanfile.py WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
 
 # Import the cmake that was made and run the setup on it
 include(${CMAKE_CURRENT_SOURCE_DIR}/conanbuildinfo.cmake)
@@ -26,16 +29,7 @@ find_package(glm CONFIG)
 Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
 find_package(Boost 1.75.0 COMPONENTS filesystem)
 
-# If we are debugging, symlink the shaders directory to allow live reloading/editing
-if (DEBUG)
-    message("Symlinking shaders for live reloading")
-    message("Link from ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders to ${CMAKE_CURRENT_BINARY_DIR}/bin")
-    execute_process(COMMAND python Scripts/debug_SymlinkShaders.py 
-        -s "${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders"
-        -d "${CMAKE_CURRENT_BINARY_DIR}/bin/Shaders"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
-endif()
-
+# Set compiler flags to C++17 with all warnings
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /std:c++17")
 else()
@@ -47,6 +41,7 @@ endif()
 
 include_directories(Glint/Headers/)
 
+# Glob all the source/headers/compiles files
 file(GLOB_RECURSE PROJECT_HEADERS Glint/Headers/*.hpp)
 file(GLOB_RECURSE PROJECT_SOURCES Glint/Sources/*.cpp)
 file(GLOB PROJECT_SHADERS Glint/Shaders/*.comp
@@ -59,6 +54,8 @@ file(GLOB PROJECT_CONFIGS CMakeLists.txt
                          .gitignore
                          .gitmodules)
 
+# If we are debugging we don't want to group shaders
+# since we want to be able to live edit within the IDE
 if (DEBUG)
     source_group("Shaders")
 else()
@@ -75,13 +72,16 @@ add_definitions(-DGLFW_INCLUDE_NONE
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS}
                                ${PROJECT_SHADERS} ${PROJECT_CONFIGS}
                                
-                               Glint/bindings/imgui_impl_glfw.cpp
-                               Glint/bindings/imgui_impl_opengl3.cpp
-                               Glint/bindings/imgui_impl_glfw.h
-                               Glint/bindings/imgui_impl_opengl3.h
+                               Glint/Vendors/imgui/imgui_impl_glfw.cpp
+                               Glint/Vendors/imgui/imgui_impl_opengl3.cpp
+                               Glint/Vendors/imgui/imgui_impl_glfw.h
+                               Glint/Vendors/imgui/imgui_impl_opengl3.h
 
                                ${VENDORS_SOURCES} )
+
 target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
+
+# Use conan's target_link_libraries instead!
 #target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 conan_target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS}
                                 PRIVATE
@@ -89,7 +89,18 @@ conan_target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS}
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 
-add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Glint/Shaders $<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders
-        DEPENDS ${PROJECT_SHADERS})
+# If we are debugging, symlink the shaders directory to allow live reloading/editing
+if (DEBUG)
+    message("Attempting to symlink shaders for live reloading from ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders to ${CMAKE_CURRENT_BINARY_DIR}/bin/Shaders")
+    find_package (Python3 COMPONENTS Interpreter Development REQUIRED)
+    message("Python3 found for linking shaders?: ${Python3_FOUND}")
+    if(Python3_FOUND)
+        add_custom_command(
+                TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/debug_SymlinkShaders.py"
+                -s "${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders"
+                -d "${CMAKE_CURRENT_BINARY_DIR}/bin/Shaders")
+    else()
+        message("Symlinking requires python 3")
+    endif()
+endif()
