@@ -2,6 +2,7 @@ import platform
 import argparse
 import sys
 import os
+import pathlib
 
 class SymlinkArgParser(argparse.ArgumentParser):
     """ Arg parser for getting all the conan stuff where it needs to get to """
@@ -26,10 +27,13 @@ class SymlinkArgParser(argparse.ArgumentParser):
 
 if __name__ == '__main__':
     args = SymlinkArgParser().parse_arguments()
-    print(f"Symlinking from {args.shader_src} to {args.shader_dst}")
 
-    if platform.system() == "Windows":
-        import _winapi
-        _winapi.CreateJunction(args.shader_src, args.shader_dst)
-    else:
-        os.symlink(args.shader_src, args.shader_dst)
+    # If the directory doesn't already exist / isn't symlinked
+    print(f"Symlinking from {args.shader_src} to {args.shader_dst}")
+    if not pathlib.Path(args.shader_dst).exists():
+
+        if platform.system() == "Windows":
+            import _winapi
+            _winapi.CreateJunction(args.shader_src, args.shader_dst)
+        else:
+            os.symlink(args.shader_src, args.shader_dst)
