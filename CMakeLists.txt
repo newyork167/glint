@@ -9,7 +9,7 @@ set(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 set(DEBUG TRUE)
 
 # Run conan install on conanfile.py
-execute_process(COMMAND conan install -if . conanfile.py WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
+execute_process(COMMAND conan install -if . conanfile.py --build=missing WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
 
 # Import the cmake that was made and run the setup on it
 include(${CMAKE_CURRENT_SOURCE_DIR}/conanbuildinfo.cmake)
@@ -24,8 +24,8 @@ find_package(stb CONFIG)
 find_package(glm CONFIG)
 
 # Dependencies -- Boost
-Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
-find_package(Boost 1.75.0 COMPONENTS filesystem)
+#Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
+#find_package(Boost 1.75.0 COMPONENTS filesystem)
 
 # Set compiler flags to C++17 with all warnings
 if(MSVC)
@@ -70,10 +70,10 @@ add_definitions(-DGLFW_INCLUDE_NONE
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS}
                                ${PROJECT_SHADERS} ${PROJECT_CONFIGS}
                                
-                               Glint/Vendors/imgui/imgui_impl_glfw.cpp
-                               Glint/Vendors/imgui/imgui_impl_opengl3.cpp
-                               Glint/Vendors/imgui/imgui_impl_glfw.h
-                               Glint/Vendors/imgui/imgui_impl_opengl3.h
+#                               Glint/Vendors/imgui/imgui_impl_glfw.cpp
+#                               Glint/Vendors/imgui/imgui_impl_opengl3.cpp
+#                               Glint/Vendors/imgui/imgui_impl_glfw.h
+#                               Glint/Vendors/imgui/imgui_impl_opengl3.h
 
                                ${VENDORS_SOURCES} )
 

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/OpenGLIMGui.iml" filepath="$PROJECT_DIR$/.idea/OpenGLIMGui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/glint.iml" filepath="$PROJECT_DIR$/.idea/glint.iml" />
     </modules>
   </component>
 </project>

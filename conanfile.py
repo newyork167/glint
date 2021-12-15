@@ -13,7 +13,6 @@ class GlintConan(ConanFile):
     description = "Glint conan recipe"
     url = "https://github.com/newyork167/glint"
     settings = "os", "compiler", "build_type", "arch"
-    #settings = {"os": None, "build_type": None, "compiler": None, "arch": ["x86_64"]}
 
     requires = dependencies.requires
     generators = "cmake"
