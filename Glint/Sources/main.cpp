@@ -10,7 +10,7 @@
 #include <cstdlib>
 
 // Include LearnOpenGL Lessons
-#include "learnopengl/0.GettingStarted/0.CreatingAWindow.hpp"
+#include "learnopengl/0.HelloTriangle/0.HelloTriangle.hpp"
 
 int main(int argc, char* argv[]) {
 	Lesson().main_loop();

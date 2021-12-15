@@ -10,6 +10,5 @@ public:
 	int main_loop() override;
 
 private:
-	const int m_width = 1280;
-	const int m_height = 800;
+    int build_triangle(unsigned int *VAO, unsigned int *VBO, unsigned int *EBO);
 };
