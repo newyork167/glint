@@ -9,6 +9,10 @@
 #include <cstdio>
 #include <cstdlib>
 
+// Include LearnOpenGL Lessons
+#include "../../../Glitter/Glitter/Headers/GLWindow.hpp"
+#include "learnopengl/0.GettingStarted/0.CreatingAWindow.hpp"
+
 ImGuiIO& setup_imgui(GLFWwindow *mWindow) {
     const char* glsl_version = "#version 150";
 
@@ -31,10 +35,10 @@ void render_conan_logo()
 {
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 	float sz = 300.0f;
-	static ImVec4 col1 = ImVec4(68.0 / 255.0, 83.0 / 255.0, 89.0 / 255.0, 1.0f);
-	static ImVec4 col2 = ImVec4(40.0 / 255.0, 60.0 / 255.0, 80.0 / 255.0, 1.0f);
-	static ImVec4 col3 = ImVec4(50.0 / 255.0, 65.0 / 255.0, 82.0 / 255.0, 1.0f);
-	static ImVec4 col4 = ImVec4(20.0 / 255.0, 40.0 / 255.0, 60.0 / 255.0, 1.0f);
+	static auto col1 = ImVec4(68.0 / 255.0, 83.0 / 255.0, 89.0 / 255.0, 1.0f);
+	static auto col2 = ImVec4(40.0 / 255.0, 60.0 / 255.0, 80.0 / 255.0, 1.0f);
+	static auto col3 = ImVec4(50.0 / 255.0, 65.0 / 255.0, 82.0 / 255.0, 1.0f);
+	static auto col4 = ImVec4(20.0 / 255.0, 40.0 / 255.0, 60.0 / 255.0, 1.0f);
 	const ImVec2 p = ImGui::GetCursorScreenPos();
 	float x = p.x + 4.0f, y = p.y + 4.0f;
 	draw_list->AddQuadFilled(ImVec2(x, y + 0.25 * sz), ImVec2(x + 0.5 * sz, y + 0.5 * sz), ImVec2(x + sz, y + 0.25 * sz), ImVec2(x + 0.5 * sz, y), ImColor(col1));
@@ -48,17 +52,17 @@ void render_conan_logo()
 void render_test_image() {
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 	float sz = 300.0f;
-	auto testColor1 = ((sin(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
-	auto testColor2 = ((cos(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
-	auto testColor3 = ((tan(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
-	auto testPosition = sin(ImGui::GetTime()) * 100.f;
+	auto test_color1 = ((sin(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
+	auto test_color2 = ((cos(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
+	auto test_color3 = ((tan(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
+	auto test_position = sin(ImGui::GetTime()) * 100.f;
 	//std::cout << testColor1 << ", " << testColor2 << ", " << testColor3 << std::endl;
-	ImVec4 col4 = ImVec4(testColor1, testColor2, testColor3, 1.0f);
+	ImVec4 col4 = ImVec4(test_color1, test_color2, test_color3, 1.0f);
 	ImVec2 p = ImGui::GetCursorScreenPos();
 	float x = p.x + 4.0f, y = p.y + 4.0f;
-	std::cout << x << std::endl;
-	draw_list->AddBezierCurve(ImVec2(x + testPosition + 0.72 * sz, y + 0.24 * sz), ImVec2(x + testPosition + 0.68 * sz, y + 0.15 * sz), ImVec2(x + testPosition + 0.48 * sz, y + 0.13 * sz), ImVec2(x + testPosition + 0.39 * sz, y + 0.17 * sz), ImColor(col4), 10, 18);
-	draw_list->AddBezierCurve(ImVec2(x + testPosition + 0.39 * sz, y + 0.17 * sz), ImVec2(x + 0.2 * sz, y + 0.25 * sz), ImVec2(x + 0.3 * sz, y + 0.35 * sz), ImVec2(x + 0.49 * sz, y + 0.38 * sz), ImColor(col4), 10, 18);
+	//std::cout << x << std::endl;
+	draw_list->AddBezierCurve(ImVec2(x + test_position + 0.72 * sz, y + 0.24 * sz), ImVec2(x + test_position + 0.68 * sz, y + 0.15 * sz), ImVec2(x + test_position + 0.48 * sz, y + 0.13 * sz), ImVec2(x + test_position + 0.39 * sz, y + 0.17 * sz), ImColor(col4), 10, 18);
+	draw_list->AddBezierCurve(ImVec2(x + test_position + 0.39 * sz, y + 0.17 * sz), ImVec2(x + 0.2 * sz, y + 0.25 * sz), ImVec2(x + 0.3 * sz, y + 0.35 * sz), ImVec2(x + 0.49 * sz, y + 0.38 * sz), ImColor(col4), 10, 18);
 }
 
 void render_test_imgui(Shader *triangle_shader, GLuint vao) {
@@ -139,7 +143,8 @@ void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 	glBindVertexArray(0);
 }
 
-int main(int argc, char* argv[]) {
+int test()
+{
 	// Load GLFW and Create a Window
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -147,16 +152,16 @@ int main(int argc, char* argv[]) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	auto mWindow = glfwCreateWindow(mWidth, mHeight, "OpenGL", nullptr, nullptr);
+	auto m_window = glfwCreateWindow(m_width, m_height, "OpenGL", nullptr, nullptr);
 
 	// Check for Valid Context
-	if (mWindow == nullptr) {
+	if (m_window == nullptr) {
 		fprintf(stderr, "Failed to Create OpenGL Context");
 		return EXIT_FAILURE;
 	}
 
 	// Create Context and Load OpenGL Functions
-	glfwMakeContextCurrent(mWindow);
+	glfwMakeContextCurrent(m_window);
 	gladLoadGL();
 	std::cerr << "OpenGL " << glGetString(GL_VERSION) << std::endl;
 
@@ -167,16 +172,17 @@ int main(int argc, char* argv[]) {
 	unsigned int vbo, vao, ebo;
 	create_triangle(vbo, vao, ebo);
 
+
 	// init shader
-	Shader triangle_shader{ "Shaders/basic/simple-shader.vs", "Shaders/basic/simple-shader.fs" };
+	Shader triangle_shader{ "Shaders/basic/simple-shader.vert", "Shaders/basic/simple-shader.frag" };
 
 	// Setup test imgui window
-	setup_imgui(mWindow);
+	setup_imgui(m_window);
 
 	// Rendering Loop
-	while (glfwWindowShouldClose(mWindow) == false) {
-		if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			glfwSetWindowShouldClose(mWindow, true);
+	while (glfwWindowShouldClose(m_window) == false) {
+		if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(m_window, true);
 
 		// Background Fill Color
 		glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
@@ -185,8 +191,17 @@ int main(int argc, char* argv[]) {
 		render_test_imgui(&triangle_shader, vao);
 
 		// Flip Buffers and Draw
-		glfwSwapBuffers(mWindow);
+		glfwSwapBuffers(m_window);
 		glfwPollEvents();
 	}   glfwTerminate();
 	return EXIT_SUCCESS;
+}
+
+int main(int argc, char* argv[]) {
+	auto useLesson = true;
+	if (useLesson) {
+		Lesson().main_loop();
+	} else {
+		test();
+	}
 }

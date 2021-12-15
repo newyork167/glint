@@ -30,9 +30,11 @@
 #include "boost/filesystem.hpp"
 #include "classes/vertex_buffer.hpp"
 
+#include "spdlog/spdlog.h"
+
 // Define Some Constants
 #define PI 3.14159265358979323846
-const int mWidth = 1280;
-const int mHeight = 800;
+const int m_width = 1280;
+const int m_height = 800;
 
 #endif //~ Glint Header

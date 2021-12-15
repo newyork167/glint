@@ -87,6 +87,13 @@ conan_target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS}
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 
+# Copy Assets
+add_custom_target(copy_assets
+    COMMAND ${CMAKE_COMMAND} -E copy_directory 
+    ${CMAKE_CURRENT_LIST_DIR}/Glint/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets
+)
+add_dependencies(${PROJECT_NAME} copy_assets)
+
 # If we are debugging, symlink the shaders directory to allow live reloading/editing
 if (DEBUG)
     message("Attempting to symlink shaders for live reloading from ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}/Shaders to ${CMAKE_CURRENT_BINARY_DIR}/bin/Shaders")
