@@ -19,6 +19,11 @@ find_package(glad MODULE )
 find_package(glfw3 MODULE REQUIRED)
 find_package(stb MODULE )
 find_package(glm MODULE )
+find_package(fmt MODULE )
+
+# Dependencies -- Boost
+Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
+find_package(Boost 1.79.0 COMPONENTS filesystem)
 
 # Glob all the source/headers/compiles files
 file(GLOB_RECURSE PROJECT_HEADERS include/*.h include/*.hpp)

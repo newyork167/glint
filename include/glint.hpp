@@ -7,7 +7,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-//#include <btBulletDynamicsCommon.h>
+#include <btBulletDynamicsCommon.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -28,7 +28,13 @@
 #include "../external/imgui/imgui_impl_opengl3.h"
 
 #include "boost/filesystem.hpp"
+#include <fmt/core.h>
+
+// Local includes
 #include "classes/vertex_buffer.hpp"
+
+// Include LearnOpenGL Lessons
+#include "../include/learnopengl/0.HelloTriangle/0.HelloTriangle.hpp"
 
 // Define Some Constants
 #define PI 3.14159265358979323846

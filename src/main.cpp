@@ -9,8 +9,8 @@
 #include <cstdio>
 #include <cstdlib>
 
-// Include LearnOpenGL Lessons
-#include "../include/learnopengl/0.HelloTriangle/0.HelloTriangle.hpp"
+// Bullet Test
+#include "../include/tests/bullet_test.hpp"
 
 ImGuiIO& setup_imgui(GLFWwindow *mWindow) {
     const char* glsl_version = "#version 150";
@@ -156,6 +156,15 @@ int test() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     auto mWindow = glfwCreateWindow(m_width, m_height, "OpenGL", nullptr, nullptr);
+
+    // Testing bullet3 instantiation
+//    auto collisionConfiguration = new btDefaultCollisionConfiguration();
+//    auto dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    bullet_test();
+
+    // Testing boost
+    auto file_size = boost::filesystem::file_size("./dear-imgui-conan");
+    fmt::print("file_size: {}\n", file_size);  // Should match the build size in an `ls -la` of the build directory
 
     // Check for Valid Context
     if (mWindow == nullptr) {
