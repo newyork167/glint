@@ -7,8 +7,17 @@ set(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 # CHANGEME when you want to not run in debug
 set(DEBUG TRUE)
 
-execute_process(COMMAND tools/m1.sh WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tools)
-execute_process(COMMAND conan install -if . ../conanfile.py --profile:build default --profile:host m1 --build=missing WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
+if(APPLE)
+    execute_process( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
+    if(${ARCHITECTURE} STREQUAL "arm64")
+        execute_process(COMMAND tools/m1.sh WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tools)
+        execute_process(COMMAND conan install -if . ../conanfile.py --profile:build default --profile:host m1 --build=missing WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
+    else()
+        execute_process(COMMAND conan install -if . ../conanfile.py --build=missing WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
+    endif()
+else()
+
+endif()
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
