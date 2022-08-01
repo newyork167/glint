@@ -15,7 +15,7 @@ class GlintConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
 
     requires = dependencies.requires
-    generators = "cmake"
+    generators = ["cmake", "cmake_find_package"]
     default_options = dependencies.options
 
     def build(self):
@@ -31,7 +31,7 @@ class GlintConan(ConanFile):
         self.copy("*.bin", dst="bin", src="bin")
         self.copy("*.dat", dst="bin", src="bin")
         self.copy("*.pak", dst="bin", src="bin")
-        self.copy("imgui_impl_glfw.cpp", dst=f"{os.getcwd()}/Glint/Vendors/imgui", src="./res/bindings")
-        self.copy("imgui_impl_opengl3.cpp", dst=f"{os.getcwd()}/Glint/Vendors/imgui", src="./res/bindings")
-        self.copy("imgui_impl_glfw.h", dst=f"{os.getcwd()}/Glint/Vendors/imgui", src="./res/bindings")
-        self.copy("imgui_impl_opengl3.h", dst=f"{os.getcwd()}/Glint/Vendors/imgui", src="./res/bindings")
+        self.copy("imgui_impl_glfw.cpp", dst=f"{os.getcwd()}/external/imgui", src="./res/bindings")
+        self.copy("imgui_impl_opengl3.cpp", dst=f"{os.getcwd()}/external/imgui", src="./res/bindings")
+        self.copy("imgui_impl_glfw.h", dst=f"{os.getcwd()}/external/imgui", src="./res/bindings")
+        self.copy("imgui_impl_opengl3.h", dst=f"{os.getcwd()}/external/imgui", src="./res/bindings")

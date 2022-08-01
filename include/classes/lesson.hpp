@@ -1,4 +1,4 @@
-#include "../classes/shader_s.h"
+#include "shader_s.h"
 
 class LessonBase {
 public:

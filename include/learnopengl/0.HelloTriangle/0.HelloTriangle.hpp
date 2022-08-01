@@ -1,4 +1,4 @@
-#include "classes/lesson.hpp"
+#include "../../classes/lesson.hpp"
 
 #include <iostream>
 #include <ostream>

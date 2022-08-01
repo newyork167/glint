@@ -1,4 +1,4 @@
-#include "learnopengl/0.HelloTriangle/0.HelloTriangle.hpp"
+#include "../../../include/learnopengl/0.HelloTriangle/0.HelloTriangle.hpp"
 
 int Lesson::main_loop() {
 	// Load GLFW and Create a Window

@@ -4,6 +4,10 @@
 #pragma once
 
 // System Headers
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+//#include <btBulletDynamicsCommon.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -19,13 +23,12 @@
 
 // Set your includes here
 #include "classes/shader_s.h"
-//#include "imgui.h"
-//#include "../Vendors/imgui/imgui_impl_glfw.h"
-//#include "../Vendors/imgui/imgui_impl_opengl3.h"
+#include "imgui.h"
+#include "../external//imgui/imgui_impl_glfw.h"
+#include "../external/imgui/imgui_impl_opengl3.h"
 
+#include "boost/filesystem.hpp"
 #include "classes/vertex_buffer.hpp"
-
-//#include "spdlog/spdlog.h"
 
 // Define Some Constants
 #define PI 3.14159265358979323846
