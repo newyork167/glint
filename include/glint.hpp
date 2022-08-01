@@ -24,7 +24,7 @@
 // Set your includes here
 #include "classes/shader_s.h"
 #include "imgui.h"
-#include "../external//imgui/imgui_impl_glfw.h"
+#include "../external/imgui/imgui_impl_glfw.h"
 #include "../external/imgui/imgui_impl_opengl3.h"
 
 #include "boost/filesystem.hpp"
