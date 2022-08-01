@@ -162,10 +162,6 @@ int test() {
 //    auto dispatcher = new btCollisionDispatcher(collisionConfiguration);
     bullet_test();
 
-    // Testing boost
-    auto file_size = boost::filesystem::file_size("./dear-imgui-conan");
-    fmt::print("file_size: {}\n", file_size);  // Should match the build size in an `ls -la` of the build directory
-
     // Check for Valid Context
     if (mWindow == nullptr) {
         fprintf(stderr, "Failed to Create OpenGL Context");

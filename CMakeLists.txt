@@ -7,17 +7,23 @@ set(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 # CHANGEME when you want to not run in debug
 set(DEBUG TRUE)
 
+# Set external src folder
+set(CONAN_EXTERNAL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external)
+
+# Run conan install based on os/arch
 if(APPLE)
     execute_process( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
     if(${ARCHITECTURE} STREQUAL "arm64")
         message("Building for Apple Silicon")
         execute_process(COMMAND tools/m1.sh WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tools)
-        execute_process(COMMAND conan install -if . ../conanfile.py --profile:build default --profile:host m1 --build=missing WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
+        execute_process(COMMAND conan install -if . ../conanfile.py -e CONAN_EXTERNAL_PATH=${CONAN_EXTERNAL_PATH} --profile:build default --profile:host m1 --build=missing WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
     else()
-        execute_process(COMMAND conan install -if . ../conanfile.py --build=missing WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
+        execute_process(COMMAND conan install -if . ../conanfile.py -e CONAN_EXTERNAL_PATH=${CONAN_EXTERNAL_PATH} --build=missing WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
     endif()
 else()
-
+    message("Building for windows/linux")
+    message("Checking for conanfile.py in ${CMAKE_SOURCE_DIR} and installing to ${CONAN_EXTERNAL_PATH}")
+    execute_process(COMMAND conan install -if . ${CMAKE_SOURCE_DIR}/conanfile.py -e CONAN_EXTERNAL_PATH=${CONAN_EXTERNAL_PATH} --build=missing WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
 endif()
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)

@@ -31,8 +31,11 @@ class GlintConan(ConanFile):
         self.copy("*.bin", dst="bin", src="bin")
         self.copy("*.dat", dst="bin", src="bin")
         self.copy("*.pak", dst="bin", src="bin")
-        print(f"DUMPING IMGUI: {os.getcwd()}/external/imgui")
-        self.copy("imgui_impl_glfw.cpp", dst=f"{os.getcwd()}/../external/imgui", src="./res/bindings")
-        self.copy("imgui_impl_opengl3.cpp", dst=f"{os.getcwd()}/../external/imgui", src="./res/bindings")
-        self.copy("imgui_impl_glfw.h", dst=f"{os.getcwd()}/../external/imgui", src="./res/bindings")
-        self.copy("imgui_impl_opengl3.h", dst=f"{os.getcwd()}/../external/imgui", src="./res/bindings")
+
+        external_src = os.getenv("CONAN_EXTERNAL_PATH", f"{os.getcwd()}/../external/")
+        imgui_dst = f"{external_src}/imgui"
+        print(f"DUMPING IMGUI: {imgui_dst}")
+        self.copy("imgui_impl_glfw.cpp", dst=f"{imgui_dst}", src="./res/bindings")
+        self.copy("imgui_impl_opengl3.cpp", dst=f"{imgui_dst}", src="./res/bindings")
+        self.copy("imgui_impl_glfw.h", dst=f"{imgui_dst}", src="./res/bindings")
+        self.copy("imgui_impl_opengl3.h", dst=f"{imgui_dst}", src="./res/bindings")

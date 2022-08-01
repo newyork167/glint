@@ -87,4 +87,6 @@ int Lesson::build_triangle(unsigned int *VAO, unsigned int *VBO, unsigned int *E
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0);
+
+    return 0;
 }

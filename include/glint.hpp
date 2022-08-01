@@ -31,7 +31,6 @@
 #include <fmt/core.h>
 
 // Local includes
-#include "classes/vertex_buffer.hpp"
 
 // Include LearnOpenGL Lessons
 #include "../include/learnopengl/0.HelloTriangle/0.HelloTriangle.hpp"
