@@ -56,6 +56,9 @@ cmake -G "Visual Studio 16 2019" -A "x64" ..
 ## Conan Package Manager Steps
 If you would like to manually run: ```conan install -if . ./conanfile.py --build=missing```
 
+## Issues
+When upgrading to Big Sur, I needed to do the following to get the linkage to the new sdk to match JetBrains Darwin.cmake: [https://developer.apple.com/forums/thread/667561](https://developer.apple.com/forums/thread/667561)
+
 ## License
 >The MIT License (MIT)
 
