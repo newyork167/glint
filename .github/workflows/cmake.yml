@@ -28,6 +28,18 @@ jobs:
             ENV_CMAKE: source activate_run.sh
 
     steps:
+    - name:  Install
+      run:   |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+            apt install libgl-dev
+        elif [ "$RUNNER_OS" == "Windows" ]; then
+            #choco install important_windows_software
+            echo "$RUNNER_OS not installing extras"
+        else
+            echo "$RUNNER_OS not installing extras"
+        fi
+      shell: bash
+
     - uses: actions/checkout@v3
     - name: Set up Python
       uses: actions/setup-python@v2
