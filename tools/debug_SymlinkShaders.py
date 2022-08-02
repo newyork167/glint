@@ -27,10 +27,8 @@ class SymlinkArgParser(argparse.ArgumentParser):
 
 if __name__ == '__main__':
     args = SymlinkArgParser().parse_arguments()
-
-    # If the directory doesn't already exist / isn't symlinked
-    print(f"Symlinking from {args.shader_src} to {args.shader_dst}")
     if not pathlib.Path(args.shader_dst).exists():
+        print(f"Symlinking from {args.shader_src} to {args.shader_dst}")
 
         if platform.system() == "Windows":
             import _winapi

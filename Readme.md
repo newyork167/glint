@@ -42,19 +42,19 @@ cmake -G "Visual Studio 16 2019" -A "x64" ..
 ## Third Party Libraries
 [Dependencies](https://conan.io/center/) can be added in the dependencies.py file. The following are installed at baseline.
 
-Functionality           | Library
------------------------ | ------------------------------------------
-Mesh Loading            | [assimp](https://github.com/assimp/assimp)
-Physics                 | [bullet](https://github.com/bulletphysics/bullet3)
-OpenGL Function Loader  | [glad](https://github.com/Dav1dde/glad)
-Windowing and Input     | [glfw](https://github.com/glfw/glfw)
-OpenGL Mathematics      | [glm](https://github.com/g-truc/glm)
-Texture Loading         | [stb](https://github.com/nothings/stb)
-Dead Simple Gui         | [imgui](https://github.com/ocornut/imgui)
-Fast C++ Logging        | [spdlog](https://github.com/gabime/spdlog)
+| Functionality          | Library                                            | M1 Supported |
+|------------------------|----------------------------------------------------|--------------|
+ | Mesh Loading           | [assimp](https://github.com/assimp/assimp)         | ❌            |
+ | Physics                | [bullet](https://github.com/bulletphysics/bullet3) | ❌            |
+ | OpenGL Function Loader | [glad](https://github.com/Dav1dde/glad)            | ✅            |
+| Windowing and Input    | [glfw](https://github.com/glfw/glfw)               | ✅            |
+| OpenGL Mathematics     | [glm](https://github.com/g-truc/glm)               | ✅            |
+| Texture Loading        | [stb](https://github.com/nothings/stb)             | ✅            |
+| Dead Simple Gui        | [imgui](https://github.com/ocornut/imgui)          | ❌            |
+| Fast C++ Logging       | [spdlog](https://github.com/gabime/spdlog)         | ❌            |
 
 ## Conan Package Manager Steps
-If you would like to manually run: ```conan install ./conanfile.py```
+If you would like to manually run: ```conan install -if . ./conanfile.py --build=missing```
 
 ## Issues
 When upgrading to Big Sur, I needed to do the following to get the linkage to the new sdk to match JetBrains Darwin.cmake: [https://developer.apple.com/forums/thread/667561](https://developer.apple.com/forums/thread/667561)

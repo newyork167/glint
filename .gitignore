@@ -3,6 +3,7 @@ Glint/bindings/
 Glint/Vendors/
 conan_imports_manifest.txt
 CMakeSettings.json
+venv/
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,clion,conan
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,visualstudiocode,clion,conan
