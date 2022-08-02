@@ -158,8 +158,6 @@ int test() {
     auto mWindow = glfwCreateWindow(m_width, m_height, "OpenGL", nullptr, nullptr);
 
     // Testing bullet3 instantiation
-//    auto collisionConfiguration = new btDefaultCollisionConfiguration();
-//    auto dispatcher = new btCollisionDispatcher(collisionConfiguration);
     bullet_test();
 
     // Check for Valid Context
