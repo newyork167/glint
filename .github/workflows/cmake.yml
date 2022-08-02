@@ -24,8 +24,6 @@ jobs:
             ENV_CMAKE: ./activate_run.ps1
           - os: macos-latest
             ENV_CMAKE: source activate_run.sh
-          - os: ubuntu-latest
-            ENV_CMAKE: source activate_run.sh
 
     steps:
     - name:  Install
