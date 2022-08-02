@@ -25,6 +25,10 @@ class GlintConan(ConanFile):
         cmake.install()
 
     def imports(self):
+        # Path to external src provided as env var from cmake or shell call
+        external_src = os.getenv("CONAN_EXTERNAL_PATH", f"{os.getcwd()}/../external/")
+
+        # Copy main bits to bin dir
         self.copy("*.dll", dst="bin", src="bin")
         self.copy("*.so*", dst="bin", src="lib")
         self.copy("*.dylib*", dst="bin", src="lib")
@@ -32,9 +36,8 @@ class GlintConan(ConanFile):
         self.copy("*.dat", dst="bin", src="bin")
         self.copy("*.pak", dst="bin", src="bin")
 
-        external_src = os.getenv("CONAN_EXTERNAL_PATH", f"{os.getcwd()}/../external/")
+        # Handle putting IMGui in correct place for compiler
         imgui_dst = f"{external_src}/imgui"
-        print(f"DUMPING IMGUI: {imgui_dst}")
         self.copy("imgui_impl_glfw.cpp", dst=f"{imgui_dst}", src="./res/bindings")
         self.copy("imgui_impl_opengl3.cpp", dst=f"{imgui_dst}", src="./res/bindings")
         self.copy("imgui_impl_glfw.h", dst=f"{imgui_dst}", src="./res/bindings")

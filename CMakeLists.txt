@@ -28,14 +28,16 @@ endif()
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
+set_directory_properties(PROPERTIES external/ ADDITIONAL_MAKE_CLEAN_FILES)
+
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
 find_package(imgui CONFIG)
-find_package(glad MODULE )
+find_package(glad MODULE)
 find_package(glfw3 MODULE REQUIRED)
-find_package(stb MODULE )
-find_package(glm MODULE )
-find_package(fmt MODULE )
+find_package(stb MODULE)
+find_package(glm MODULE)
+find_package(fmt MODULE)
 
 # Dependencies -- Boost
 Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
