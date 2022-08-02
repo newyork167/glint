@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
-project(dear-imgui-conan)
+project(glint)
 
 set(CMAKE_CXX_STANDARD 17)
 set(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
@@ -99,15 +99,7 @@ conan_target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS}
 set_target_properties(${PROJECT_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 
-#add_custom_command(TARGET dear-imgui-conan
-#        POST_BUILD
-#        COMMAND ${CMAKE_COMMAND} -E copy assets/shaders/simple-shader.vs ${PROJECT_BINARY_DIR}
-#        COMMAND ${CMAKE_COMMAND} -E copy assets/shaders/simple-shader.fs ${PROJECT_BINARY_DIR}
-#        )
-
-#target_compile_definitions(dear-imgui-conan PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW)
-
-conan_target_link_libraries(dear-imgui-conan)
+conan_target_link_libraries(${PROJECT_NAME})
 
 # Copy Assets
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data)
