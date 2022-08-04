@@ -55,7 +55,9 @@ void render_test_image() {
     auto testColor2 = ((cos(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
     auto testColor3 = ((tan(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
     auto testPosition = sin(ImGui::GetTime()) * 100.f;
-    //std::cout << testColor1 << ", " << testColor2 << ", " << testColor3 << std::endl;
+
+//    spdlog::get("logger")->info("{}, {}, {}", testColor1, testColor2, testColor3);
+
     ImVec4 col4 = ImVec4(testColor1, testColor2, testColor3, 1.0f);
     ImVec2 p = ImGui::GetCursorScreenPos();
     float x = p.x + 4.0f, y = p.y + 4.0f;
@@ -148,6 +150,17 @@ void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
 }
 
 int test() {
+    // Setup multi logger - one that dumps to stdout and one that dumps to a file at log.txt
+    spdlog::init_thread_pool(8192, 1);
+    auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log.txt", 1024*1024*10, 3);
+    std::vector<spdlog::sink_ptr> sinks {console, rotating_sink};
+    auto logger = std::make_shared<spdlog::async_logger>("logger", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+    spdlog::register_logger(logger);
+
+    console->set_level(spdlog::level::debug);
+    logger->info("Initializing OpenGL");
+
     // Load GLFW and Create a Window
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -157,12 +170,17 @@ int test() {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     auto mWindow = glfwCreateWindow(m_width, m_height, "OpenGL", nullptr, nullptr);
 
+    logger->info("GLFW Window Created");
+
     // Testing bullet3 instantiation
+    logger->info("Bullet3 test starting");
     bullet_test();
+    logger->info("Bullet3 test successful");
 
     // Check for Valid Context
     if (mWindow == nullptr) {
         fprintf(stderr, "Failed to Create OpenGL Context");
+        logger->error("Could not create OpenGL context");
         return EXIT_FAILURE;
     }
 
@@ -170,6 +188,7 @@ int test() {
     glfwMakeContextCurrent(mWindow);
     gladLoadGL();
     std::cerr << "OpenGL " << glGetString(GL_VERSION) << std::endl;
+    logger->info("OpenGL: {0}", (void*)glGetString(GL_VERSION));
 
     // Turn off v-sync
     glfwSwapInterval(0);
@@ -186,8 +205,10 @@ int test() {
 
     // Rendering Loop
     while (glfwWindowShouldClose(mWindow) == false) {
-        if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            logger->warn("Escape key was pressed!");
             glfwSetWindowShouldClose(mWindow, true);
+        }
 
         // Background Fill Color
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);

@@ -38,6 +38,7 @@ find_package(glfw3 MODULE REQUIRED)
 find_package(stb MODULE)
 find_package(glm MODULE)
 find_package(fmt MODULE)
+find_package(spdlog MODULE)
 
 # Dependencies -- Boost
 Set(Boost_INSTALL_DIR ${CONAN_BOOST_ROOT})
