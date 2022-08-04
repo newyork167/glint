@@ -8,7 +8,7 @@ requires = (
     ("glm/0.9.9.8"),
     ("stb/20200203"),
     ("imgui/1.79"),
-    # ("spdlog/1.10.0"),
+    ("spdlog/1.10.0"),
     #("cmake_findboost_modular/1.69.0@bincrafters/stable"),
     ("boost/1.79.0")
 )

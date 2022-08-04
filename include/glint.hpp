@@ -20,6 +20,11 @@
 // STD Includes
 #include <vector>
 #include <numeric>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/async_logger.h>
+#include <spdlog/async.h>
 
 // Set your includes here
 #include "classes/shader_s.h"
