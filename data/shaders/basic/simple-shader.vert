@@ -7,6 +7,7 @@ out vec3 vertexColor;
 
 uniform float rotation;
 uniform vec2 translation;
+uniform float iTime;
 
 void main()
 {

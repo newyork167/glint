@@ -56,7 +56,7 @@ void render_test_image() {
     auto testColor3 = ((tan(ImGui::GetTime()) + 1.0f) * (255.0f / 2.)) / 255.0f;
     auto testPosition = sin(ImGui::GetTime()) * 100.f;
 
-//    spdlog::get("logger")->info("{}, {}, {}", testColor1, testColor2, testColor3);
+//    spdlog::info("{}, {}, {}", testColor1, testColor2, testColor3);
 
     ImVec4 col4 = ImVec4(testColor1, testColor2, testColor3, 1.0f);
     ImVec2 p = ImGui::GetCursorScreenPos();
@@ -101,16 +101,13 @@ void render_test_imgui(Shader *triangle_shader, GLuint vao) {
 
     ImGui::Text("%s", glGetString(GL_VERSION));
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Time since program start: %.3f", glfwGetTime());
 
     ImGui::Begin("Conan logo");
     render_conan_logo();
     ImGui::End();
 
     ImGui::Begin("Test Drawings");
-    render_test_image();
-    ImGui::End();
-
-    ImGui::Begin("Test Drawings2");
     render_test_image();
     ImGui::End();
 
@@ -149,17 +146,50 @@ void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
     glBindVertexArray(0);
 }
 
-int test() {
+void setup_logger() {
     // Setup multi logger - one that dumps to stdout and one that dumps to a file at log.txt
     spdlog::init_thread_pool(8192, 1);
+    
     auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log.txt", 1024*1024*10, 3);
-    std::vector<spdlog::sink_ptr> sinks {console, rotating_sink};
+    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log.txt", 1024 * 1024 * 10, 3);
+    std::vector<spdlog::sink_ptr> sinks{ console, rotating_sink };
+    
     auto logger = std::make_shared<spdlog::async_logger>("logger", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     spdlog::register_logger(logger);
 
     console->set_level(spdlog::level::debug);
-    logger->info("Initializing OpenGL");
+    spdlog::set_default_logger(logger);
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        spdlog::warn("Escape key was pressed!");
+        glfwSetWindowShouldClose(window, true);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+        for (auto& shader : program_shaders) {
+            spdlog::info("Reloading shader: {0}", shader->ID);
+            auto new_shader_ID = shader->hot_reload_shaders();
+            if (new_shader_ID != 0) {
+                shader->setID(new_shader_ID);
+            } else {
+                spdlog::info("Failed to hot reload shaders");
+            }
+        }
+    }
+}
+
+void setup_uniforms() {
+    for (auto& shader : program_shaders) {
+        shader->setFloat("iTime", glfwGetTime());
+    }
+}
+
+int test() {
+    setup_logger();
+
+    spdlog::info("Initializing OpenGL");
 
     // Load GLFW and Create a Window
     glfwInit();
@@ -170,17 +200,19 @@ int test() {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     auto mWindow = glfwCreateWindow(m_width, m_height, "OpenGL", nullptr, nullptr);
 
-    logger->info("GLFW Window Created");
+    spdlog::info("GLFW Window Created");
+
+    glfwSetKeyCallback(mWindow, key_callback);
 
     // Testing bullet3 instantiation
-    logger->info("Bullet3 test starting");
+    spdlog::info("Bullet3 test starting");
     bullet_test();
-    logger->info("Bullet3 test successful");
+    spdlog::info("Bullet3 test successful");
 
     // Check for Valid Context
     if (mWindow == nullptr) {
         fprintf(stderr, "Failed to Create OpenGL Context");
-        logger->error("Could not create OpenGL context");
+        spdlog::error("Could not create OpenGL context");
         return EXIT_FAILURE;
     }
 
@@ -188,7 +220,7 @@ int test() {
     glfwMakeContextCurrent(mWindow);
     gladLoadGL();
     std::cerr << "OpenGL " << glGetString(GL_VERSION) << std::endl;
-    logger->info("OpenGL: {0}", (void*)glGetString(GL_VERSION));
+    spdlog::info("OpenGL: {0}", (void*)glGetString(GL_VERSION));
 
     // Turn off v-sync
     glfwSwapInterval(0);
@@ -199,22 +231,20 @@ int test() {
 
     // init shader
     Shader triangle_shader{ "Shaders/basic/simple-shader.vert", "Shaders/basic/simple-shader.frag" };
+    program_shaders.push_back(&triangle_shader);
 
     // Setup test imgui window
     setup_imgui(mWindow);
 
     // Rendering Loop
     while (glfwWindowShouldClose(mWindow) == false) {
-        if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            logger->warn("Escape key was pressed!");
-            glfwSetWindowShouldClose(mWindow, true);
-        }
 
         // Background Fill Color
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         render_test_imgui(&triangle_shader, vao);
+        setup_uniforms();
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);

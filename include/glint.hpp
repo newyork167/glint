@@ -25,6 +25,7 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/async_logger.h>
 #include <spdlog/async.h>
+#include <time.h>
 
 // Set your includes here
 #include "classes/shader_s.h"
@@ -44,5 +45,10 @@
 #define PI 3.14159265358979323846
 const int m_width = 1280;
 const int m_height = 800;
+
+inline std::vector<Shader *> program_shaders{};
+inline time_t start = time(nullptr);
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 #endif //~ Glint Header

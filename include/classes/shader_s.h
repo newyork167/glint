@@ -53,8 +53,7 @@ public:
 			// convert stream into string
 			shaderCode = shaderStream.str();
 		} catch (std::ifstream::failure& e) {
-			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-            spdlog::get("logger")->error("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ");
+            spdlog::error("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ\n{}", e.what());
 		}
 
 		return shaderCode;
@@ -66,7 +65,7 @@ public:
 		auto shaderFileString = read_shader_file_to_str(shader_filename);
 		auto shaderCodeStr = shaderFileString.c_str();
 
-        spdlog::get("logger")->info("Creating shader from file: {0}, with type {1}", shader_filename, shader_type);
+        spdlog::info("Creating shader from file: {0}, with type {1}", shader_filename, shader_type);
 
 		// vertex shader
 		shader = glCreateShader(shader_type);
@@ -89,7 +88,7 @@ public:
 			break;
 		}
 
-        spdlog::get("logger")->info("Shader creation successful");
+        spdlog::info("Shader creation successful");
 
 		return shader;
 	}
@@ -97,7 +96,7 @@ public:
 	GLuint create_shader_program_from_files(const char* vertex_shader_filename, const char* fragment_shader_filename, const char* geometryPath = nullptr) {
 		unsigned int vertex, fragment, geometry;
         
-        spdlog::get("logger")->info("Initializing shader with vertex shader: {0}, fragment shader: {1}, geometry shader: {2}", vertex_shader_filename, fragment_shader_filename, geometryPath ? geometryPath : "N/A");
+        spdlog::info("Initializing shader with vertex shader: {0}, fragment shader: {1}, geometry shader: {2}", vertex_shader_filename, fragment_shader_filename, geometryPath ? geometryPath : "N/A");
 
 		vertex = create_shader_from_file(vertex_shader_filename, GL_VERTEX_SHADER);
 		shaderFileMap[GL_VERTEX_SHADER] = vertex_shader_filename;
@@ -136,7 +135,7 @@ public:
 	GLuint reload_shader_program_from_files(const char* vertex_shader_filename, const char* fragment_shader_filename, const char* geometry_shader_filename = nullptr)  {
 		assert(vertex_shader_filename && fragment_shader_filename);
 
-        spdlog::get("logger")->info("Reloading shaders");
+        spdlog::info("Reloading shaders");
 
 		GLuint reloaded_program = create_shader_program_from_files(vertex_shader_filename, fragment_shader_filename, geometry_shader_filename);
 
@@ -154,7 +153,7 @@ public:
 		auto fragPath = this->shaderFileMap.at(GL_FRAGMENT_SHADER).c_str();
 		auto geomPath = this->shaderFileMap.find(GL_GEOMETRY_SHADER) != this->shaderFileMap.end() ? this->shaderFileMap.at(GL_VERTEX_SHADER).c_str() : nullptr;
 
-        spdlog::get("logger")->info("Hot reloading shaders");
+        spdlog::info("Hot reloading shaders");
 
 		return reload_shader_program_from_files(
 			vertPath,
@@ -263,8 +262,7 @@ private:
 			if (!success)
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-                spdlog::get("logger")->error("ERROR::SHADER_COMPILATION_ERROR of type: {0}\n{1}", type, infoLog);
+                spdlog::error("ERROR::SHADER_COMPILATION_ERROR of type: {0}\n{1}", type, infoLog);
 			}
 		}
 		else
@@ -273,8 +271,7 @@ private:
 			if (!success)
 			{
 				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-                spdlog::get("logger")->error("ERROR::PROGRAM_LINKING_ERROR of type: {0}\n{1}", type, infoLog);
+                spdlog::error("ERROR::PROGRAM_LINKING_ERROR of type: {0}\n{1}", type, infoLog);
 			}
 		}
 	}
