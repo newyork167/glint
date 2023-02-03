@@ -4,6 +4,13 @@ project(glint)
 set(CMAKE_CXX_STANDARD 17)
 set(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 
+unset(CONAN_EXISTS CACHE)
+find_program(CONAN_EXISTS conan)
+message("CONAN_EXISTS: ${CONAN_EXISTS}")
+if(NOT CONAN_EXISTS)
+    message(FATAL_ERROR "Please install conan first! https://conan.io/" )
+endif()
+
 # CHANGEME when you want to not run in debug
 set(DEBUG TRUE)
 
