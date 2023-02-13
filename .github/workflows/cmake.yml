@@ -46,7 +46,7 @@ jobs:
     - name: Install Conan
       run: pip install conan pytest && conan --version
     - name: Install CMake
-      run: conan install cmake/3.22.0@ -g=virtualrunenv
+      run: conan install cmake/3.22.0@ -g=virtualrunenv --build missing
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
